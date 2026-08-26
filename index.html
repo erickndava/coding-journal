@@ -1,0 +1,755 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#FBF8F1;
+    --paper-line:#E8E1D2;
+    --navy:#1B2A41;
+    --navy-soft:#2C3E58;
+    --ink:#22303F;
+    --ink-soft:#5B6B7C;
+    --sun:#FFC94A;
+    --coral:#FF6F59;
+    --mint:#3FAF9B;
+    --lilac:#8C7AE6;
+    --card:#FFFFFF;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  #cj-root{
+    font-family:'Baloo 2',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    min-height:100%;
+    padding:0;
+  }
+  .cj-mono{font-family:'Space Mono',monospace;}
+
+  /* ---- Header / cover strip ---- */
+  .cj-header{
+    background:var(--navy);
+    color:#fff;
+    padding:22px 20px 26px;
+    position:relative;
+    overflow:hidden;
+  }
+  .cj-header::after{
+    content:"";
+    position:absolute;
+    right:-40px; top:-40px;
+    width:160px; height:160px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,201,74,0.18), transparent 70%);
+  }
+  .cj-title-row{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    color:var(--sun);
+    letter-spacing:0.5px;
+  }
+  .cj-title{
+    font-family:'Baloo 2',sans-serif;
+    font-weight:800;
+    font-size:clamp(24px,5vw,32px);
+    margin:6px 0 14px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .cj-title .bracket{color:var(--mint);}
+  .cj-profile-row{
+    display:flex; flex-wrap:wrap; gap:10px 18px;
+    font-size:14px;
+  }
+  .cj-profile-field{
+    display:flex; align-items:center; gap:6px;
+  }
+  .cj-profile-field label{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    color:rgba(255,255,255,0.55);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+  }
+  .cj-profile-field input{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.2);
+    color:#fff;
+    border-radius:8px;
+    padding:5px 9px;
+    font-family:'Baloo 2',sans-serif;
+    font-size:14px;
+    font-weight:600;
+    min-width:110px;
+  }
+  .cj-profile-field input::placeholder{color:rgba(255,255,255,0.4);}
+  .cj-profile-field input:focus-visible{outline:2px solid var(--sun); outline-offset:1px;}
+
+  .cj-backup-row{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    margin-top:14px;
+  }
+  .cj-mini-btn-dark{
+    font-family:'Space Mono',monospace;
+    font-size:11.5px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.25);
+    color:#fff;
+    border-radius:8px;
+    padding:5px 10px;
+    cursor:pointer;
+  }
+  .cj-mini-btn-dark:hover{background:rgba(255,255,255,0.16);}
+  .cj-storage-note{font-size:11px; color:rgba(255,255,255,0.45);}
+
+  /* ---- Layout wrapper ---- */
+  .cj-wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:24px 18px 60px;
+  }
+
+  /* ---- New entry composer ---- */
+  .cj-composer{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    border-radius:var(--radius);
+    padding:18px 18px 20px;
+    box-shadow:0 2px 0 var(--paper-line);
+    margin-bottom:30px;
+  }
+  .cj-composer-head{
+    display:flex; align-items:center; gap:8px;
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:14px;
+  }
+  .cj-prompt{color:var(--mint); font-weight:700;}
+  .cj-field{margin-bottom:14px;}
+  .cj-field label{
+    display:flex; align-items:center; gap:6px;
+    font-weight:700;
+    font-size:14.5px;
+    margin-bottom:6px;
+  }
+  .cj-field .cj-icon{font-size:16px;}
+  .cj-field input[type=text],
+  .cj-field input[type=date],
+  .cj-field textarea{
+    width:100%;
+    border:1.5px solid var(--paper-line);
+    border-radius:10px;
+    padding:9px 11px;
+    font-family:'Baloo 2',sans-serif;
+    font-size:15px;
+    color:var(--ink);
+    background:#FFFEFB;
+    resize:vertical;
+  }
+  .cj-field textarea{min-height:56px;}
+  .cj-field input:focus-visible,
+  .cj-field textarea:focus-visible{
+    outline:2px solid var(--mint);
+    outline-offset:1px;
+    border-color:var(--mint);
+  }
+  .cj-row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media(max-width:480px){.cj-row2{grid-template-columns:1fr;}}
+
+  .cj-mood-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .cj-mood-btn{
+    border:2px solid var(--paper-line);
+    background:#fff;
+    border-radius:10px;
+    padding:7px 11px;
+    font-family:'Baloo 2',sans-serif;
+    font-weight:700;
+    font-size:13.5px;
+    cursor:pointer;
+    display:flex; align-items:center; gap:6px;
+    transition:transform .12s ease, border-color .12s ease;
+    color:var(--ink);
+  }
+  .cj-mood-btn:hover{transform:translateY(-1px);}
+  .cj-mood-btn.selected{border-color:var(--mood-color,var(--mint)); background:color-mix(in srgb, var(--mood-color,var(--mint)) 14%, white);}
+  .cj-mood-btn:focus-visible{outline:2px solid var(--navy); outline-offset:2px;}
+
+  .cj-submit-row{display:flex; align-items:center; gap:12px; margin-top:16px;}
+  .cj-btn{
+    font-family:'Space Mono',monospace;
+    font-weight:700;
+    font-size:14px;
+    border:none;
+    border-radius:10px;
+    padding:11px 18px;
+    cursor:pointer;
+    color:#fff;
+    background:var(--navy);
+    transition:transform .12s ease, background .12s ease;
+  }
+  .cj-btn:hover{transform:translateY(-1px); background:var(--navy-soft);}
+  .cj-btn:focus-visible{outline:2px solid var(--sun); outline-offset:2px;}
+  .cj-btn.cj-secondary{
+    background:transparent;
+    color:var(--ink-soft);
+    border:1.5px solid var(--paper-line);
+  }
+  .cj-btn.cj-secondary:hover{background:var(--paper);}
+  .cj-status{
+    font-family:'Space Mono',monospace;
+    font-size:12.5px;
+    color:var(--mint);
+    opacity:0;
+    transition:opacity .3s ease;
+  }
+  .cj-status.show{opacity:1;}
+
+  /* ---- Timeline ---- */
+  .cj-timeline-head{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:16px;
+  }
+  .cj-timeline-title{
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.6px;
+  }
+  .cj-count{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    background:var(--paper-line);
+    padding:2px 9px;
+    border-radius:999px;
+    color:var(--ink-soft);
+  }
+
+  .cj-timeline{position:relative; padding-left:26px;}
+  .cj-timeline::before{
+    content:"";
+    position:absolute; left:7px; top:6px; bottom:6px;
+    width:2px;
+    background:var(--paper-line);
+  }
+  .cj-entry{position:relative; margin-bottom:16px;}
+  .cj-dot{
+    position:absolute; left:-26px; top:20px;
+    width:16px; height:16px; border-radius:50%;
+    background:var(--dot-color,var(--mint));
+    border:3px solid var(--paper);
+    box-shadow:0 0 0 1.5px var(--dot-color,var(--mint));
+  }
+  .cj-card{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    border-radius:var(--radius);
+    padding:14px 16px;
+    cursor:pointer;
+  }
+  .cj-card-top{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    flex-wrap:wrap;
+  }
+  .cj-hash{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .cj-hash b{color:var(--dot-color,var(--mint));}
+  .cj-date{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .cj-mission-line{
+    font-weight:700;
+    font-size:15.5px;
+    margin-top:6px;
+    color:var(--ink);
+  }
+  .cj-mission-line .cj-nomission{color:var(--ink-soft); font-weight:600; font-style:italic;}
+  .cj-mood-pill{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    font-weight:700;
+    padding:3px 9px;
+    border-radius:999px;
+    color:#fff;
+    background:var(--dot-color,var(--mint));
+    white-space:nowrap;
+  }
+  .cj-details{
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px dashed var(--paper-line);
+    display:none;
+  }
+  .cj-entry.expanded .cj-details{display:block;}
+  .cj-detail-block{margin-bottom:10px;}
+  .cj-detail-block:last-child{margin-bottom:0;}
+  .cj-detail-label{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    color:var(--ink-soft);
+    margin-bottom:3px;
+    display:flex; align-items:center; gap:5px;
+  }
+  .cj-detail-text{
+    font-size:14.5px;
+    line-height:1.45;
+    white-space:pre-wrap;
+    color:var(--ink);
+  }
+  .cj-detail-empty{color:var(--ink-soft); font-style:italic; font-size:13.5px;}
+  .cj-entry-actions{
+    margin-top:12px;
+    display:flex; gap:10px;
+  }
+  .cj-mini-btn{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    background:none;
+    border:1.5px solid var(--paper-line);
+    border-radius:8px;
+    padding:5px 10px;
+    cursor:pointer;
+    color:var(--ink-soft);
+  }
+  .cj-mini-btn:hover{background:var(--paper);}
+  .cj-mini-btn.danger:hover{border-color:var(--coral); color:var(--coral);}
+  .cj-mini-btn:focus-visible{outline:2px solid var(--navy); outline-offset:2px;}
+
+  .cj-confirm{
+    margin-top:10px;
+    background:#FFF4F2;
+    border:1px solid var(--coral);
+    border-radius:8px;
+    padding:9px 11px;
+    font-size:13.5px;
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  }
+
+  .cj-empty{
+    text-align:center;
+    padding:40px 20px;
+    color:var(--ink-soft);
+  }
+  .cj-empty .cj-empty-icon{font-size:34px; margin-bottom:8px;}
+  .cj-empty .cj-mono{font-size:13px;}
+
+  .cj-loading{
+    text-align:center;
+    padding:50px 20px;
+    color:var(--ink-soft);
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .cj-mood-btn, .cj-btn{transition:none;}
+  }
+</style>
+
+<div id="cj-root">
+  <div class="cj-header">
+    <div class="cj-title-row cj-mono">// daily build log</div>
+    <div class="cj-title"><span class="bracket">&lt;/&gt;</span> My Coding Journal</div>
+    <div class="cj-profile-row">
+      <div class="cj-profile-field">
+        <label for="cj-coder">Coder</label>
+        <input id="cj-coder" type="text" placeholder="your name" />
+      </div>
+      <div class="cj-profile-field">
+        <label for="cj-project">Project</label>
+        <input id="cj-project" type="text" placeholder="project name" />
+      </div>
+    </div>
+    <div class="cj-backup-row">
+      <button class="cj-mini-btn cj-mini-btn-dark" id="cj-export-btn" type="button">⬇ export backup</button>
+      <label class="cj-mini-btn cj-mini-btn-dark" for="cj-import-file" style="cursor:pointer;">⬆ import backup</label>
+      <input id="cj-import-file" type="file" accept="application/json" style="display:none;" />
+      <span class="cj-mono cj-storage-note">saved in this browser</span>
+    </div>
+  </div>
+
+  <div class="cj-wrap">
+    <div class="cj-composer">
+      <div class="cj-composer-head"><span class="cj-prompt">$</span> log today's work</div>
+
+      <div class="cj-row2">
+        <div class="cj-field">
+          <label for="cj-date"><span class="cj-icon">📅</span> Date</label>
+          <input id="cj-date" type="date" />
+        </div>
+        <div class="cj-field">
+          <label for="cj-time"><span class="cj-icon">⏱️</span> Time spent (optional)</label>
+          <input id="cj-time" type="text" placeholder="e.g. 45 min" />
+        </div>
+      </div>
+
+      <div class="cj-field">
+        <label for="cj-mission"><span class="cj-icon">🎯</span> Today's mission</label>
+        <input id="cj-mission" type="text" placeholder="what do you want to try or finish?" />
+      </div>
+
+      <div class="cj-field">
+        <label for="cj-built"><span class="cj-icon">🛠️</span> What I built or did</label>
+        <textarea id="cj-built" placeholder="the things you actually worked on..."></textarea>
+      </div>
+
+      <div class="cj-row2">
+        <div class="cj-field">
+          <label for="cj-bugs"><span class="cj-icon">🐛</span> Bugs I squashed</label>
+          <textarea id="cj-bugs" placeholder="problems + fixes"></textarea>
+        </div>
+        <div class="cj-field">
+          <label for="cj-learned"><span class="cj-icon">💡</span> What I learned</label>
+          <textarea id="cj-learned" placeholder="new tricks or ideas"></textarea>
+        </div>
+      </div>
+
+      <div class="cj-field">
+        <label for="cj-next"><span class="cj-icon">➡️</span> Tomorrow's plan</label>
+        <input id="cj-next" type="text" placeholder="one thing to try next" />
+      </div>
+
+      <div class="cj-field">
+        <label><span class="cj-icon">⭐</span> Rate today</label>
+        <div class="cj-mood-row" id="cj-mood-row"></div>
+      </div>
+
+      <div class="cj-submit-row">
+        <button class="cj-btn" id="cj-save-btn">commit entry →</button>
+        <button class="cj-btn cj-secondary" id="cj-clear-btn" type="button">clear</button>
+        <span class="cj-status cj-mono" id="cj-status">✓ saved</span>
+      </div>
+    </div>
+
+    <div class="cj-timeline-head">
+      <span class="cj-timeline-title">commit history</span>
+      <span class="cj-count cj-mono" id="cj-count">0 entries</span>
+    </div>
+
+    <div id="cj-timeline-container">
+      <div class="cj-loading">loading journal…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const MOODS = [
+    {value:1, label:'Tricky', color:'#FF6F59'},
+    {value:2, label:'Tough',  color:'#FF9B54'},
+    {value:3, label:'Good',   color:'#FFC94A'},
+    {value:4, label:'Great',  color:'#3FAF9B'},
+    {value:5, label:'Awesome',color:'#8C7AE6'}
+  ];
+
+  let entries = [];
+  let profile = {coder:'', project:''};
+  let selectedMood = null;
+  let editingId = null;
+
+  const $ = (id) => document.getElementById(id);
+  const todayStr = () => new Date().toISOString().slice(0,10);
+
+  function makeHash(){
+    return Math.random().toString(16).slice(2,8);
+  }
+
+  function escapeHtml(str){
+    return (str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function fmtDate(d){
+    if(!d) return '';
+    const parts = d.split('-');
+    if(parts.length !== 3) return d;
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return `${months[parseInt(parts[1],10)-1]} ${parseInt(parts[2],10)}, ${parts[0]}`;
+  }
+
+  function moodByValue(v){
+    return MOODS.find(m => m.value === v) || MOODS[2];
+  }
+
+  // ---- Mood buttons ----
+  function renderMoodButtons(){
+    const row = $('cj-mood-row');
+    row.innerHTML = '';
+    MOODS.forEach(m => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cj-mood-btn';
+      btn.style.setProperty('--mood-color', m.color);
+      btn.textContent = m.label;
+      btn.dataset.value = m.value;
+      if(selectedMood === m.value) btn.classList.add('selected');
+      btn.addEventListener('click', () => {
+        selectedMood = (selectedMood === m.value) ? null : m.value;
+        renderMoodButtons();
+      });
+      row.appendChild(btn);
+    });
+  }
+
+  // ---- Storage (browser localStorage — no account or Claude runtime needed) ----
+  const LS_PROFILE = 'cj_profile';
+  const LS_ENTRIES = 'cj_entries';
+
+  async function loadAll(){
+    try{
+      const p = localStorage.getItem(LS_PROFILE);
+      if(p){ profile = JSON.parse(p); }
+    }catch(e){ /* no profile yet */ }
+    try{
+      const e = localStorage.getItem(LS_ENTRIES);
+      if(e){ entries = JSON.parse(e); }
+    }catch(e){ entries = []; }
+
+    $('cj-coder').value = profile.coder || '';
+    $('cj-project').value = profile.project || '';
+    renderTimeline();
+  }
+
+  async function saveProfile(){
+    profile = { coder: $('cj-coder').value.trim(), project: $('cj-project').value.trim() };
+    try{
+      localStorage.setItem(LS_PROFILE, JSON.stringify(profile));
+    }catch(e){ console.error('Could not save profile', e); }
+  }
+
+  async function saveEntries(){
+    try{
+      localStorage.setItem(LS_ENTRIES, JSON.stringify(entries));
+      return true;
+    }catch(e){
+      console.error('Could not save entries', e);
+      return false;
+    }
+  }
+
+  function handleExport(){
+    const payload = { profile, entries, exportedAt: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const namePart = (profile.project || profile.coder || 'my').toString().trim().replace(/[^a-z0-9]+/gi,'-').toLowerCase() || 'my';
+    a.href = url;
+    a.download = `coding-journal-backup-${namePart}-${todayStr()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function handleImport(file){
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      try{
+        const data = JSON.parse(ev.target.result);
+        const incomingEntries = Array.isArray(data.entries) ? data.entries : [];
+        const existingIds = new Set(entries.map(e => e.id));
+        const merged = entries.concat(incomingEntries.filter(e => e && e.id && !existingIds.has(e.id)));
+        entries = merged;
+        if(data.profile && !profile.coder && !profile.project){
+          profile = data.profile;
+          $('cj-coder').value = profile.coder || '';
+          $('cj-project').value = profile.project || '';
+          await saveProfile();
+        }
+        await saveEntries();
+        renderTimeline();
+        const status = $('cj-status');
+        status.textContent = `✓ imported ${incomingEntries.length} entries`;
+        status.classList.add('show');
+        setTimeout(() => status.classList.remove('show'), 2400);
+      }catch(err){
+        alert('Could not read that backup file. Make sure it\'s a journal export (.json) from this app.');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // ---- Timeline rendering ----
+  function renderTimeline(){
+    const container = $('cj-timeline-container');
+    $('cj-count').textContent = entries.length + (entries.length === 1 ? ' entry' : ' entries');
+
+    if(entries.length === 0){
+      container.innerHTML = `
+        <div class="cj-empty">
+          <div class="cj-empty-icon">🌱</div>
+          <div><strong>No commits yet</strong></div>
+          <div class="cj-mono">log today's work above to start your history</div>
+        </div>`;
+      return;
+    }
+
+    const sorted = [...entries].sort((a,b) => (b.date+b.createdAt).localeCompare(a.date+a.createdAt));
+
+    const html = sorted.map(entry => {
+      const mood = moodByValue(entry.mood);
+      const hasDetails = entry.built || entry.bugs || entry.learned || entry.next || entry.time;
+      return `
+        <div class="cj-entry" data-id="${entry.id}">
+          <div class="cj-dot" style="--dot-color:${mood.color}"></div>
+          <div class="cj-card" style="--dot-color:${mood.color}">
+            <div class="cj-card-top">
+              <span class="cj-hash">commit <b>#${entry.id}</b></span>
+              <span class="cj-date">${fmtDate(entry.date)}${entry.time ? ' · '+escapeHtml(entry.time) : ''}</span>
+            </div>
+            <div class="cj-mission-line">
+              ${entry.mission ? escapeHtml(entry.mission) : '<span class="cj-nomission">(no mission set)</span>'}
+              <span class="cj-mood-pill" style="--dot-color:${mood.color}">${mood.label}</span>
+            </div>
+            <div class="cj-details">
+              ${entry.built ? block('🛠️ What I built', entry.built) : ''}
+              ${entry.bugs ? block('🐛 Bugs squashed', entry.bugs) : ''}
+              ${entry.learned ? block('💡 What I learned', entry.learned) : ''}
+              ${entry.next ? block('➡️ Tomorrow\'s plan', entry.next) : ''}
+              ${!hasDetails ? '<div class="cj-detail-empty">No extra notes for this entry.</div>' : ''}
+              <div class="cj-entry-actions">
+                <button class="cj-mini-btn" data-action="edit" data-id="${entry.id}">edit</button>
+                <button class="cj-mini-btn danger" data-action="delete" data-id="${entry.id}">delete</button>
+              </div>
+              <div class="cj-confirm" data-confirm-for="${entry.id}" style="display:none;">
+                Delete this commit? This can't be undone.
+                <button class="cj-mini-btn danger" data-action="confirm-delete" data-id="${entry.id}">yes, delete</button>
+                <button class="cj-mini-btn" data-action="cancel-delete" data-id="${entry.id}">cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    container.innerHTML = `<div class="cj-timeline">${html}</div>`;
+
+    function block(label, text){
+      return `<div class="cj-detail-block">
+        <div class="cj-detail-label">${label}</div>
+        <div class="cj-detail-text">${escapeHtml(text)}</div>
+      </div>`;
+    }
+
+    // card expand/collapse
+    container.querySelectorAll('.cj-card').forEach(card => {
+      card.addEventListener('click', (ev) => {
+        if(ev.target.closest('.cj-entry-actions') || ev.target.closest('.cj-confirm')) return;
+        card.closest('.cj-entry').classList.toggle('expanded');
+      });
+    });
+
+    // action buttons
+    container.querySelectorAll('[data-action]').forEach(btn => {
+      btn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        const id = btn.dataset.id;
+        const action = btn.dataset.action;
+        if(action === 'delete'){
+          const box = container.querySelector(`.cj-confirm[data-confirm-for="${id}"]`);
+          if(box) box.style.display = 'flex';
+        } else if(action === 'cancel-delete'){
+          const box = container.querySelector(`.cj-confirm[data-confirm-for="${id}"]`);
+          if(box) box.style.display = 'none';
+        } else if(action === 'confirm-delete'){
+          entries = entries.filter(e => e.id !== id);
+          saveEntries();
+          renderTimeline();
+        } else if(action === 'edit'){
+          startEdit(id);
+        }
+      });
+    });
+  }
+
+  function startEdit(id){
+    const entry = entries.find(e => e.id === id);
+    if(!entry) return;
+    editingId = id;
+    $('cj-date').value = entry.date || todayStr();
+    $('cj-time').value = entry.time || '';
+    $('cj-mission').value = entry.mission || '';
+    $('cj-built').value = entry.built || '';
+    $('cj-bugs').value = entry.bugs || '';
+    $('cj-learned').value = entry.learned || '';
+    $('cj-next').value = entry.next || '';
+    selectedMood = entry.mood || null;
+    renderMoodButtons();
+    $('cj-save-btn').textContent = 'update entry →';
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function clearForm(){
+    editingId = null;
+    $('cj-date').value = todayStr();
+    $('cj-time').value = '';
+    $('cj-mission').value = '';
+    $('cj-built').value = '';
+    $('cj-bugs').value = '';
+    $('cj-learned').value = '';
+    $('cj-next').value = '';
+    selectedMood = null;
+    renderMoodButtons();
+    $('cj-save-btn').textContent = 'commit entry →';
+  }
+
+  async function handleSave(){
+    const mission = $('cj-mission').value.trim();
+    const built = $('cj-built').value.trim();
+    if(!mission && !built){
+      $('cj-mission').focus();
+      return;
+    }
+    const data = {
+      id: editingId || makeHash(),
+      date: $('cj-date').value || todayStr(),
+      time: $('cj-time').value.trim(),
+      mission,
+      built,
+      bugs: $('cj-bugs').value.trim(),
+      learned: $('cj-learned').value.trim(),
+      next: $('cj-next').value.trim(),
+      mood: selectedMood || 3,
+      createdAt: editingId ? (entries.find(e=>e.id===editingId)||{}).createdAt || new Date().toISOString() : new Date().toISOString()
+    };
+
+    if(editingId){
+      entries = entries.map(e => e.id === editingId ? data : e);
+    } else {
+      entries.push(data);
+    }
+
+    const ok = await saveEntries();
+    if(ok){
+      const status = $('cj-status');
+      status.textContent = editingId ? '✓ updated' : '✓ saved';
+      status.classList.add('show');
+      setTimeout(() => status.classList.remove('show'), 1800);
+    }
+    clearForm();
+    renderTimeline();
+  }
+
+  // ---- Wire up ----
+  $('cj-date').value = todayStr();
+  renderMoodButtons();
+  $('cj-save-btn').addEventListener('click', handleSave);
+  $('cj-clear-btn').addEventListener('click', clearForm);
+  $('cj-coder').addEventListener('blur', saveProfile);
+  $('cj-project').addEventListener('blur', saveProfile);
+  $('cj-export-btn').addEventListener('click', handleExport);
+  $('cj-import-file').addEventListener('change', (ev) => {
+    const file = ev.target.files[0];
+    if(file) handleImport(file);
+    ev.target.value = '';
+  });
+
+  loadAll();
+})();
+</script>
