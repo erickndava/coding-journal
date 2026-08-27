@@ -85,6 +85,43 @@
   }
   .cj-profile-field input::placeholder{color:rgba(255,255,255,0.4);}
   .cj-profile-field input:focus-visible{outline:2px solid var(--sun); outline-offset:1px;}
+  .cj-profile-field select{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.2);
+    color:#fff;
+    border-radius:8px;
+    padding:5px 9px;
+    font-family:'Baloo 2',sans-serif;
+    font-size:14px;
+    font-weight:600;
+    min-width:130px;
+  }
+  .cj-profile-field select option{color:#000;}
+  .cj-project-add-toggle{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.25);
+    color:#fff;
+    border-radius:8px;
+    width:26px; height:26px;
+    font-size:15px;
+    line-height:1;
+    cursor:pointer;
+  }
+  .cj-project-add-toggle:hover{background:rgba(255,255,255,0.16);}
+  .cj-project-add-row{
+    display:flex; gap:8px; align-items:center;
+    margin-top:10px;
+  }
+  .cj-project-add-row input{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.2);
+    color:#fff;
+    border-radius:8px;
+    padding:6px 10px;
+    font-family:'Baloo 2',sans-serif;
+    font-size:13.5px;
+  }
+  .cj-project-add-row input::placeholder{color:rgba(255,255,255,0.4);}
 
   .cj-backup-row{
     display:flex; align-items:center; gap:10px; flex-wrap:wrap;
@@ -103,12 +140,71 @@
   .cj-mini-btn-dark:hover{background:rgba(255,255,255,0.16);}
   .cj-storage-note{font-size:11px; color:rgba(255,255,255,0.45);}
 
+  .cj-sync-panel{margin-top:12px;}
+  .cj-sync-toggle{
+    background:none; border:none; color:rgba(255,255,255,0.75);
+    font-size:12px; cursor:pointer; padding:0;
+  }
+  .cj-sync-toggle:hover{color:#fff;}
+  .cj-sync-body{
+    margin-top:12px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:10px;
+    padding:14px;
+  }
+  .cj-sync-body .cj-field label{color:rgba(255,255,255,0.7); font-size:12.5px;}
+  .cj-sync-body .cj-field input{
+    background:rgba(255,255,255,0.9);
+  }
+  .cj-sync-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  @media(max-width:480px){.cj-sync-grid{grid-template-columns:1fr;}}
+  .cj-sync-actions{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:6px;}
+  .cj-sync-status{font-size:11.5px; color:rgba(255,255,255,0.75);}
+
   /* ---- Layout wrapper ---- */
   .cj-wrap{
     max-width:760px;
     margin:0 auto;
     padding:24px 18px 60px;
   }
+
+  .cj-stats-bar{
+    display:flex; flex-wrap:wrap; gap:10px;
+    margin-bottom:22px;
+  }
+  .cj-stat-chip{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    border-radius:999px;
+    padding:7px 14px;
+    font-family:'Space Mono',monospace;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    display:flex; align-items:center; gap:6px;
+  }
+  .cj-stat-chip b{color:var(--ink); font-weight:700;}
+
+  .cj-glossary-panel{margin-top:30px;}
+  .cj-glossary-toggle{
+    background:none; border:none; padding:0; cursor:pointer;
+    font-family:'Space Mono',monospace;
+    font-size:13px; color:var(--ink-soft);
+    text-transform:uppercase; letter-spacing:0.6px;
+  }
+  .cj-glossary-toggle:hover{color:var(--ink);}
+  .cj-glossary-body{margin-top:14px; display:none;}
+  .cj-glossary-item{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:8px;
+    display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+  }
+  .cj-glossary-term{font-size:14.5px; color:var(--ink);}
+  .cj-glossary-date{font-family:'Space Mono',monospace; font-size:11px; color:var(--ink-soft); white-space:nowrap;}
+  .cj-glossary-empty{color:var(--ink-soft); font-style:italic; font-size:13.5px; padding:4px 2px;}
 
   /* ---- New entry composer ---- */
   .cj-composer{
@@ -364,9 +460,15 @@
         <input id="cj-coder" type="text" placeholder="your name" />
       </div>
       <div class="cj-profile-field">
-        <label for="cj-project">Project</label>
-        <input id="cj-project" type="text" placeholder="project name" />
+        <label for="cj-project-select">Project</label>
+        <select id="cj-project-select"></select>
+        <button type="button" class="cj-project-add-toggle" id="cj-project-add-toggle" title="Add a new project">+</button>
       </div>
+    </div>
+    <div class="cj-project-add-row" id="cj-project-add-row" style="display:none;">
+      <input id="cj-project-new-name" type="text" placeholder="new project name" />
+      <button type="button" class="cj-mini-btn-dark" id="cj-project-add-confirm">add</button>
+      <button type="button" class="cj-mini-btn-dark" id="cj-project-add-cancel">cancel</button>
     </div>
     <div class="cj-backup-row">
       <button class="cj-mini-btn cj-mini-btn-dark" id="cj-export-btn" type="button">⬇ export backup</button>
@@ -374,9 +476,43 @@
       <input id="cj-import-file" type="file" accept="application/json" style="display:none;" />
       <span class="cj-mono cj-storage-note">saved in this browser</span>
     </div>
+    <div class="cj-sync-panel" id="cj-sync-panel">
+      <button class="cj-sync-toggle cj-mono" id="cj-sync-toggle" type="button">🔗 GitHub sync (optional) ▾</button>
+      <div class="cj-sync-body" id="cj-sync-body" style="display:none;">
+        <div class="cj-sync-grid">
+          <div class="cj-field">
+            <label for="cj-gh-owner">GitHub username</label>
+            <input id="cj-gh-owner" type="text" placeholder="e.g. erickndava" />
+          </div>
+          <div class="cj-field">
+            <label for="cj-gh-repo">Repo name</label>
+            <input id="cj-gh-repo" type="text" placeholder="e.g. coding-journal" />
+          </div>
+          <div class="cj-field">
+            <label for="cj-gh-path">File path</label>
+            <input id="cj-gh-path" type="text" placeholder="journal-entries.json" />
+          </div>
+          <div class="cj-field">
+            <label for="cj-gh-branch">Branch</label>
+            <input id="cj-gh-branch" type="text" placeholder="main" />
+          </div>
+        </div>
+        <div class="cj-field">
+          <label for="cj-gh-token">Personal access token (fine-grained, this repo only, Contents R/W)</label>
+          <input id="cj-gh-token" type="password" placeholder="github_pat_..." autocomplete="off" />
+        </div>
+        <div class="cj-sync-actions">
+          <button class="cj-btn cj-secondary" id="cj-gh-save-btn" type="button">save connection</button>
+          <button class="cj-btn" id="cj-gh-sync-btn" type="button">sync now ⇄</button>
+          <span class="cj-mono cj-sync-status" id="cj-sync-status"></span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="cj-wrap">
+    <div class="cj-stats-bar" id="cj-stats-bar"></div>
+
     <div class="cj-composer">
       <div class="cj-composer-head"><span class="cj-prompt">$</span> log today's work</div>
 
@@ -418,6 +554,11 @@
       </div>
 
       <div class="cj-field">
+        <label for="cj-reflection"><span class="cj-icon">🤔</span> Reflection</label>
+        <textarea id="cj-reflection" placeholder=""></textarea>
+      </div>
+
+      <div class="cj-field">
         <label><span class="cj-icon">⭐</span> Rate today</label>
         <div class="cj-mood-row" id="cj-mood-row"></div>
       </div>
@@ -437,6 +578,11 @@
     <div id="cj-timeline-container">
       <div class="cj-loading">loading journal…</div>
     </div>
+
+    <div class="cj-glossary-panel">
+      <button class="cj-glossary-toggle" id="cj-glossary-toggle" type="button">📖 Glossary ▾</button>
+      <div class="cj-glossary-body" id="cj-glossary-body"></div>
+    </div>
   </div>
 </div>
 
@@ -451,9 +597,30 @@
   ];
 
   let entries = [];
-  let profile = {coder:'', project:''};
+  let profile = {coder:''};
+  let projects = [];
+  let activeProjectId = null;
   let selectedMood = null;
   let editingId = null;
+
+  const REFLECTION_PROMPTS = [
+    "What's one decision you made today and why?",
+    "What would you do differently if you started over?",
+    "What's the trickiest part of what you worked on?",
+    "If you explained today's work to a friend, what would you say?",
+    "What are you most proud of from today?",
+    "What's still confusing you?",
+    "What's one thing you'd teach someone else after today?"
+  ];
+
+  function dayOfYear(d){
+    const start = new Date(d.getFullYear(), 0, 0);
+    const diff = d - start;
+    return Math.floor(diff / 86400000);
+  }
+  function currentReflectionPrompt(){
+    return REFLECTION_PROMPTS[dayOfYear(new Date()) % REFLECTION_PROMPTS.length];
+  }
 
   const $ = (id) => document.getElementById(id);
   const todayStr = () => new Date().toISOString().slice(0,10);
@@ -501,6 +668,55 @@
   // ---- Storage (browser localStorage — no account or Claude runtime needed) ----
   const LS_PROFILE = 'cj_profile';
   const LS_ENTRIES = 'cj_entries';
+  const LS_PROJECTS = 'cj_projects';
+  const LS_ACTIVE_PROJECT = 'cj_active_project';
+
+  function makeProjectId(){
+    return 'p' + Math.random().toString(16).slice(2,8);
+  }
+
+  // Ensures at least one project exists, migrating any pre-project data
+  // (an old single "project name" field, or entries with no projectId) into it.
+  function ensureProjects(){
+    if(projects.length === 0){
+      const legacyName = (profile && profile.project) ? profile.project : null;
+      const needsHome = entries.some(e => !e.projectId);
+      const name = legacyName || (needsHome ? 'My Project' : 'My Project');
+      const p = { id: makeProjectId(), name, createdAt: new Date().toISOString() };
+      projects = [p];
+      entries.forEach(e => { if(!e.projectId) e.projectId = p.id; });
+      delete profile.project;
+    }
+    if(!activeProjectId || !projects.some(p => p.id === activeProjectId)){
+      activeProjectId = projects[0].id;
+    }
+  }
+
+  function renderProjectSelect(){
+    const sel = $('cj-project-select');
+    sel.innerHTML = '';
+    projects.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = p.name;
+      if(p.id === activeProjectId) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+
+  async function addProject(name){
+    name = (name || '').trim();
+    if(!name) return;
+    const p = { id: makeProjectId(), name, createdAt: new Date().toISOString() };
+    projects.push(p);
+    activeProjectId = p.id;
+    await saveProjects();
+    await saveActiveProject();
+    renderProjectSelect();
+    renderTimeline();
+    renderStats();
+    renderGlossary();
+  }
 
   async function loadAll(){
     try{
@@ -508,20 +724,44 @@
       if(p){ profile = JSON.parse(p); }
     }catch(e){ /* no profile yet */ }
     try{
+      const pr = localStorage.getItem(LS_PROJECTS);
+      if(pr){ projects = JSON.parse(pr); }
+    }catch(e){ projects = []; }
+    try{
       const e = localStorage.getItem(LS_ENTRIES);
       if(e){ entries = JSON.parse(e); }
     }catch(e){ entries = []; }
+    activeProjectId = localStorage.getItem(LS_ACTIVE_PROJECT) || null;
+
+    ensureProjects();
+    await saveProjects();
+    await saveActiveProject();
 
     $('cj-coder').value = profile.coder || '';
-    $('cj-project').value = profile.project || '';
+    renderProjectSelect();
+    $('cj-reflection').placeholder = currentReflectionPrompt();
     renderTimeline();
+    renderStats();
+    renderGlossary();
   }
 
   async function saveProfile(){
-    profile = { coder: $('cj-coder').value.trim(), project: $('cj-project').value.trim() };
+    profile = { coder: $('cj-coder').value.trim() };
     try{
       localStorage.setItem(LS_PROFILE, JSON.stringify(profile));
     }catch(e){ console.error('Could not save profile', e); }
+  }
+
+  async function saveProjects(){
+    try{
+      localStorage.setItem(LS_PROJECTS, JSON.stringify(projects));
+    }catch(e){ console.error('Could not save projects', e); }
+  }
+
+  async function saveActiveProject(){
+    try{
+      localStorage.setItem(LS_ACTIVE_PROJECT, activeProjectId || '');
+    }catch(e){ /* ignore */ }
   }
 
   async function saveEntries(){
@@ -534,12 +774,20 @@
     }
   }
 
+  function mergeProjectLists(localList, remoteList){
+    const byId = new Map();
+    localList.forEach(p => byId.set(p.id, p));
+    remoteList.forEach(rp => { if(!byId.has(rp.id)) byId.set(rp.id, rp); });
+    return Array.from(byId.values());
+  }
+
   function handleExport(){
-    const payload = { profile, entries, exportedAt: new Date().toISOString() };
+    const payload = { profile, projects, entries, exportedAt: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    const namePart = (profile.project || profile.coder || 'my').toString().trim().replace(/[^a-z0-9]+/gi,'-').toLowerCase() || 'my';
+    const activeProj = projects.find(p => p.id === activeProjectId);
+    const namePart = ((activeProj && activeProj.name) || profile.coder || 'my').toString().trim().replace(/[^a-z0-9]+/gi,'-').toLowerCase() || 'my';
     a.href = url;
     a.download = `coding-journal-backup-${namePart}-${todayStr()}.json`;
     document.body.appendChild(a);
@@ -554,17 +802,22 @@
       try{
         const data = JSON.parse(ev.target.result);
         const incomingEntries = Array.isArray(data.entries) ? data.entries : [];
+        const incomingProjects = Array.isArray(data.projects) ? data.projects : [];
         const existingIds = new Set(entries.map(e => e.id));
-        const merged = entries.concat(incomingEntries.filter(e => e && e.id && !existingIds.has(e.id)));
-        entries = merged;
-        if(data.profile && !profile.coder && !profile.project){
+        entries = entries.concat(incomingEntries.filter(e => e && e.id && !existingIds.has(e.id)));
+        projects = mergeProjectLists(projects, incomingProjects);
+        if(data.profile && !profile.coder){
           profile = data.profile;
           $('cj-coder').value = profile.coder || '';
-          $('cj-project').value = profile.project || '';
           await saveProfile();
         }
+        ensureProjects();
+        await saveProjects();
         await saveEntries();
+        renderProjectSelect();
         renderTimeline();
+        renderStats();
+        renderGlossary();
         const status = $('cj-status');
         status.textContent = `✓ imported ${incomingEntries.length} entries`;
         status.classList.add('show');
@@ -576,12 +829,163 @@
     reader.readAsText(file);
   }
 
+  // ---- GitHub sync ----
+  const LS_GH_CONFIG = 'cj_gh_config';
+  let ghConfig = null; // {owner, repo, path, branch, token}
+
+  function loadGhConfig(){
+    try{
+      const raw = localStorage.getItem(LS_GH_CONFIG);
+      if(raw) ghConfig = JSON.parse(raw);
+    }catch(e){ ghConfig = null; }
+    if(ghConfig){
+      $('cj-gh-owner').value = ghConfig.owner || '';
+      $('cj-gh-repo').value = ghConfig.repo || '';
+      $('cj-gh-path').value = ghConfig.path || 'journal-entries.json';
+      $('cj-gh-branch').value = ghConfig.branch || 'main';
+      $('cj-gh-token').value = ghConfig.token || '';
+    } else {
+      $('cj-gh-path').value = 'journal-entries.json';
+      $('cj-gh-branch').value = 'main';
+    }
+  }
+
+  function saveGhConfig(){
+    ghConfig = {
+      owner: $('cj-gh-owner').value.trim(),
+      repo: $('cj-gh-repo').value.trim(),
+      path: $('cj-gh-path').value.trim() || 'journal-entries.json',
+      branch: $('cj-gh-branch').value.trim() || 'main',
+      token: $('cj-gh-token').value.trim()
+    };
+    // token intentionally kept ONLY in localStorage — never included in export backups
+    localStorage.setItem(LS_GH_CONFIG, JSON.stringify(ghConfig));
+    setSyncStatus('connection saved');
+  }
+
+  function setSyncStatus(text, isError){
+    const el = $('cj-sync-status');
+    el.textContent = text;
+    el.style.color = isError ? '#FFB4A8' : 'rgba(255,255,255,0.75)';
+  }
+
+  function ghConfigured(){
+    return !!(ghConfig && ghConfig.owner && ghConfig.repo && ghConfig.token);
+  }
+
+  function b64EncodeUnicode(str){
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+  function b64DecodeUnicode(str){
+    return decodeURIComponent(escape(atob(str)));
+  }
+
+  async function ghFetchRemote(){
+    const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${encodeURIComponent(ghConfig.path)}?ref=${encodeURIComponent(ghConfig.branch)}`;
+    const res = await fetch(url, {
+      headers:{
+        'Authorization': `Bearer ${ghConfig.token}`,
+        'Accept':'application/vnd.github+json'
+      }
+    });
+    if(res.status === 404){
+      return { sha:null, data:{ profile:{}, projects:[], entries:[] } };
+    }
+    if(!res.ok){
+      throw new Error(`GitHub read failed (${res.status})`);
+    }
+    const json = await res.json();
+    const decoded = b64DecodeUnicode(json.content.replace(/\n/g,''));
+    let data;
+    try{ data = JSON.parse(decoded); }catch(e){ data = { profile:{}, projects:[], entries:[] }; }
+    if(!Array.isArray(data.projects)) data.projects = [];
+    return { sha: json.sha, data };
+  }
+
+  async function ghPushRemote(payload, sha){
+    const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${encodeURIComponent(ghConfig.path)}`;
+    const body = {
+      message: `journal sync ${new Date().toISOString()}`,
+      content: b64EncodeUnicode(JSON.stringify(payload, null, 2)),
+      branch: ghConfig.branch
+    };
+    if(sha) body.sha = sha;
+    const res = await fetch(url, {
+      method:'PUT',
+      headers:{
+        'Authorization': `Bearer ${ghConfig.token}`,
+        'Accept':'application/vnd.github+json',
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    if(!res.ok){
+      const errText = await res.text().catch(()=> '');
+      throw new Error(`GitHub write failed (${res.status}): ${errText.slice(0,200)}`);
+    }
+    return res.json();
+  }
+
+  function mergeEntryLists(localList, remoteList){
+    const byId = new Map();
+    localList.forEach(e => byId.set(e.id, e));
+    remoteList.forEach(re => {
+      const le = byId.get(re.id);
+      if(!le){
+        byId.set(re.id, re);
+      } else {
+        const lt = new Date(le.updatedAt || le.createdAt || 0).getTime();
+        const rt = new Date(re.updatedAt || re.createdAt || 0).getTime();
+        if(rt > lt) byId.set(re.id, re);
+      }
+    });
+    return Array.from(byId.values());
+  }
+
+  async function syncNow(attempt){
+    if(!ghConfigured()){
+      setSyncStatus('add username, repo & token first', true);
+      return;
+    }
+    setSyncStatus('syncing…');
+    try{
+      const remote = await ghFetchRemote();
+      const mergedEntries = mergeEntryLists(entries, remote.data.entries || []);
+      const mergedProjects = mergeProjectLists(projects, remote.data.projects || []);
+      const mergedProfile = (profile.coder) ? profile : (remote.data.profile || profile);
+
+      entries = mergedEntries;
+      projects = mergedProjects;
+      profile = mergedProfile;
+      ensureProjects();
+      await saveEntries();
+      await saveProjects();
+      $('cj-coder').value = profile.coder || '';
+      await saveProfile();
+      renderProjectSelect();
+      renderTimeline();
+      renderStats();
+      renderGlossary();
+
+      await ghPushRemote({ profile: mergedProfile, projects: mergedProjects, entries: mergedEntries, syncedAt: new Date().toISOString() }, remote.sha);
+      setSyncStatus(`✓ synced ${mergedEntries.length} entries — ${new Date().toLocaleTimeString()}`);
+    }catch(err){
+      if(!attempt && /409|failed \(409\)|sha/i.test(err.message)){
+        // someone else pushed in between — retry once with fresh sha
+        return syncNow(1);
+      }
+      console.error(err);
+      setSyncStatus(`⚠ ${err.message}`, true);
+    }
+  }
+
   // ---- Timeline rendering ----
   function renderTimeline(){
     const container = $('cj-timeline-container');
-    $('cj-count').textContent = entries.length + (entries.length === 1 ? ' entry' : ' entries');
+    const projectEntries = entries.filter(e => e.projectId === activeProjectId);
+    $('cj-count').textContent = projectEntries.length + (projectEntries.length === 1 ? ' entry' : ' entries');
 
-    if(entries.length === 0){
+    if(projectEntries.length === 0){
       container.innerHTML = `
         <div class="cj-empty">
           <div class="cj-empty-icon">🌱</div>
@@ -591,11 +995,11 @@
       return;
     }
 
-    const sorted = [...entries].sort((a,b) => (b.date+b.createdAt).localeCompare(a.date+a.createdAt));
+    const sorted = [...projectEntries].sort((a,b) => (b.date+b.createdAt).localeCompare(a.date+a.createdAt));
 
     const html = sorted.map(entry => {
       const mood = moodByValue(entry.mood);
-      const hasDetails = entry.built || entry.bugs || entry.learned || entry.next || entry.time;
+      const hasDetails = entry.built || entry.bugs || entry.learned || entry.next || entry.reflection || entry.time;
       return `
         <div class="cj-entry" data-id="${entry.id}">
           <div class="cj-dot" style="--dot-color:${mood.color}"></div>
@@ -613,6 +1017,7 @@
               ${entry.bugs ? block('🐛 Bugs squashed', entry.bugs) : ''}
               ${entry.learned ? block('💡 What I learned', entry.learned) : ''}
               ${entry.next ? block('➡️ Tomorrow\'s plan', entry.next) : ''}
+              ${entry.reflection ? block('🤔 Reflection', entry.reflection) : ''}
               ${!hasDetails ? '<div class="cj-detail-empty">No extra notes for this entry.</div>' : ''}
               <div class="cj-entry-actions">
                 <button class="cj-mini-btn" data-action="edit" data-id="${entry.id}">edit</button>
@@ -661,11 +1066,95 @@
           entries = entries.filter(e => e.id !== id);
           saveEntries();
           renderTimeline();
+          renderStats();
+          renderGlossary();
         } else if(action === 'edit'){
           startEdit(id);
         }
       });
     });
+  }
+
+  // ---- Stats / streaks ----
+  function computeStats(projectEntries){
+    const dateSet = new Set(projectEntries.map(e => e.date).filter(Boolean));
+    const dates = Array.from(dateSet).sort(); // ascending yyyy-mm-dd strings sort correctly
+
+    let longestStreak = 0, run = 0, prev = null;
+    dates.forEach(d => {
+      if(prev){
+        const diffDays = Math.round((new Date(d) - new Date(prev)) / 86400000);
+        run = (diffDays === 1) ? run + 1 : 1;
+      } else {
+        run = 1;
+      }
+      longestStreak = Math.max(longestStreak, run);
+      prev = d;
+    });
+
+    let currentStreak = 0;
+    if(dates.length){
+      const today = todayStr();
+      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+      const mostRecent = dates[dates.length - 1];
+      if(mostRecent === today || mostRecent === yesterday){
+        currentStreak = 1;
+        let cursor = new Date(mostRecent);
+        for(let i = dates.length - 2; i >= 0; i--){
+          const expected = new Date(cursor.getTime() - 86400000).toISOString().slice(0,10);
+          if(dates[i] === expected){ currentStreak++; cursor = new Date(expected); }
+          else break;
+        }
+      }
+    }
+
+    const bugsCount = projectEntries.filter(e => e.bugs && e.bugs.trim()).length;
+
+    return { total: projectEntries.length, currentStreak, longestStreak, bugsCount };
+  }
+
+  function renderStats(){
+    const bar = $('cj-stats-bar');
+    const projectEntries = entries.filter(e => e.projectId === activeProjectId);
+    if(projectEntries.length === 0){ bar.innerHTML = ''; return; }
+    const s = computeStats(projectEntries);
+    const chips = [
+      `🔥 <b>${s.currentStreak}</b> day streak`,
+      `📦 <b>${s.total}</b> ${s.total === 1 ? 'entry' : 'entries'}`,
+      `🐛 <b>${s.bugsCount}</b> bugs squashed`,
+      `🏆 best streak <b>${s.longestStreak}</b>`
+    ];
+    bar.innerHTML = chips.map(c => `<div class="cj-stat-chip cj-mono">${c}</div>`).join('');
+  }
+
+  // ---- Glossary ----
+  function computeGlossary(projectEntries){
+    const seen = new Map(); // lowercased line -> {text, date}
+    [...projectEntries]
+      .sort((a,b) => (a.date||'').localeCompare(b.date||''))
+      .forEach(e => {
+        if(!e.learned) return;
+        e.learned.split('\n').map(l => l.trim()).filter(Boolean).forEach(line => {
+          const key = line.toLowerCase();
+          seen.set(key, { text: line, date: e.date });
+        });
+      });
+    return Array.from(seen.values()).sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  }
+
+  function renderGlossary(){
+    const body = $('cj-glossary-body');
+    const projectEntries = entries.filter(e => e.projectId === activeProjectId);
+    const items = computeGlossary(projectEntries);
+    if(items.length === 0){
+      body.innerHTML = '<div class="cj-glossary-empty">Nothing yet — things you write in "What I learned" will collect here.</div>';
+      return;
+    }
+    body.innerHTML = items.map(it => `
+      <div class="cj-glossary-item">
+        <span class="cj-glossary-term">${escapeHtml(it.text)}</span>
+        <span class="cj-glossary-date cj-mono">${fmtDate(it.date)}</span>
+      </div>`).join('');
   }
 
   function startEdit(id){
@@ -679,6 +1168,7 @@
     $('cj-bugs').value = entry.bugs || '';
     $('cj-learned').value = entry.learned || '';
     $('cj-next').value = entry.next || '';
+    $('cj-reflection').value = entry.reflection || '';
     selectedMood = entry.mood || null;
     renderMoodButtons();
     $('cj-save-btn').textContent = 'update entry →';
@@ -694,6 +1184,8 @@
     $('cj-bugs').value = '';
     $('cj-learned').value = '';
     $('cj-next').value = '';
+    $('cj-reflection').value = '';
+    $('cj-reflection').placeholder = currentReflectionPrompt();
     selectedMood = null;
     renderMoodButtons();
     $('cj-save-btn').textContent = 'commit entry →';
@@ -708,6 +1200,7 @@
     }
     const data = {
       id: editingId || makeHash(),
+      projectId: editingId ? (entries.find(e=>e.id===editingId)||{}).projectId || activeProjectId : activeProjectId,
       date: $('cj-date').value || todayStr(),
       time: $('cj-time').value.trim(),
       mission,
@@ -715,8 +1208,10 @@
       bugs: $('cj-bugs').value.trim(),
       learned: $('cj-learned').value.trim(),
       next: $('cj-next').value.trim(),
+      reflection: $('cj-reflection').value.trim(),
       mood: selectedMood || 3,
-      createdAt: editingId ? (entries.find(e=>e.id===editingId)||{}).createdAt || new Date().toISOString() : new Date().toISOString()
+      createdAt: editingId ? (entries.find(e=>e.id===editingId)||{}).createdAt || new Date().toISOString() : new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     if(editingId){
@@ -734,6 +1229,8 @@
     }
     clearForm();
     renderTimeline();
+    renderStats();
+    renderGlossary();
   }
 
   // ---- Wire up ----
@@ -742,7 +1239,6 @@
   $('cj-save-btn').addEventListener('click', handleSave);
   $('cj-clear-btn').addEventListener('click', clearForm);
   $('cj-coder').addEventListener('blur', saveProfile);
-  $('cj-project').addEventListener('blur', saveProfile);
   $('cj-export-btn').addEventListener('click', handleExport);
   $('cj-import-file').addEventListener('change', (ev) => {
     const file = ev.target.files[0];
@@ -750,6 +1246,52 @@
     ev.target.value = '';
   });
 
-  loadAll();
+  $('cj-project-select').addEventListener('change', async (ev) => {
+    activeProjectId = ev.target.value;
+    await saveActiveProject();
+    clearForm();
+    renderTimeline();
+    renderStats();
+    renderGlossary();
+  });
+  $('cj-project-add-toggle').addEventListener('click', () => {
+    const row = $('cj-project-add-row');
+    const open = row.style.display !== 'none';
+    row.style.display = open ? 'none' : 'flex';
+    if(!open) $('cj-project-new-name').focus();
+  });
+  $('cj-project-add-cancel').addEventListener('click', () => {
+    $('cj-project-add-row').style.display = 'none';
+    $('cj-project-new-name').value = '';
+  });
+  $('cj-project-add-confirm').addEventListener('click', async () => {
+    await addProject($('cj-project-new-name').value);
+    $('cj-project-new-name').value = '';
+    $('cj-project-add-row').style.display = 'none';
+  });
+  $('cj-project-new-name').addEventListener('keydown', (ev) => {
+    if(ev.key === 'Enter'){ ev.preventDefault(); $('cj-project-add-confirm').click(); }
+  });
+
+  $('cj-glossary-toggle').addEventListener('click', () => {
+    const body = $('cj-glossary-body');
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : 'block';
+    $('cj-glossary-toggle').textContent = `📖 Glossary ${open ? '▾' : '▴'}`;
+  });
+
+  $('cj-sync-toggle').addEventListener('click', () => {
+    const body = $('cj-sync-body');
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : 'block';
+    $('cj-sync-toggle').textContent = `🔗 GitHub sync (optional) ${open ? '▾' : '▴'}`;
+  });
+  $('cj-gh-save-btn').addEventListener('click', saveGhConfig);
+  $('cj-gh-sync-btn').addEventListener('click', () => syncNow());
+
+  loadGhConfig();
+  loadAll().then(() => {
+    if(ghConfigured()) syncNow();
+  });
 })();
 </script>
